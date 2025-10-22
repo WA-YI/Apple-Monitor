@@ -110,7 +110,7 @@ public class AppleMonitor {
                     page.navigate(url, new Page.NavigateOptions().setTimeout(30000));
 
                     // 获取返回的 JSON 文本
-                    String body = page.evaluate("() => document.body.innerText");
+                    String body = page.evaluate("() => document.body.innerText").toString();
                     responseJsonObject = JSONObject.parseObject(body);
 
                     browser.close();
