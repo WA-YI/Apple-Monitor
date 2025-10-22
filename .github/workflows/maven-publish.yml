@@ -1,6 +1,6 @@
-name: Build & Zip Apple Monitor
+name: Build & Release Apple Monitor
 
-# 支持手动触发和 push 到主分支时触发
+# 支持手动触发和 push 到 main 分支
 on:
   workflow_dispatch:
   push:
@@ -35,6 +35,14 @@ jobs:
           cp README.md dist/ || echo "README.md not found, skipped"
           zip -r apple-monitor-v${{ github.run_number }}.zip dist
 
-      # 5️⃣ 输出 zip 文件路径
-      - name: Show generated files
-        run: ls -lh *.zip dist/
+      # 5️⃣ 上传到 GitHub Release
+      - name: Create GitHub Release and upload zip
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ github.run_number }}
+          name: Apple Monitor v${{ github.run_number }}
+          artifacts: apple-monitor-v${{ github.run_number }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
